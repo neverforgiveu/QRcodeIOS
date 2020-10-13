@@ -37,6 +37,9 @@ class ViewController: UIViewController {
                 let url = editText?.text
                 let data = url?.data(using: String.Encoding.ascii)
                 let filter = CIFilter(name: "CIQRCodeGenerator")
+            
+                gotoWeb(url: url)
+           
                 
                 filter?.setValue(data, forKey: "inputMessage")
                 filter?.setValue("H", forKey: "inputCorrectionLevel")
@@ -49,9 +52,10 @@ class ViewController: UIViewController {
                    btnAction.setTitle("清除", for: [])
                     
         }else{
-            imgQRCode = nil
+            imgQRCode.image = nil
             qrcodeImage = nil
             btnAction.setTitle("generate", for: [])
+            editText?.text = ""
         }
        
     }
@@ -65,6 +69,15 @@ class ViewController: UIViewController {
         imgQRCode.image = UIImage(ciImage: transformedImage)
 
 
+    }
+    
+    func gotoWeb(url : String?){
+        if(url == ""){
+            return
+        }else{
+            let web = URL(string: url!)
+            UIApplication.shared.open((web)!, options: [:], completionHandler: nil)
+        }
     }
     
     
