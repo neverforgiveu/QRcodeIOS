@@ -26,41 +26,79 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    
+    
+    
+    
+    
+    
+    func Create(string: String) -> UIImage? {
+        let data = string.data(using: String.Encoding.ascii)
+
+        if let filter = CIFilter(name: "CIQRCodeGenerator") {
+            filter.setValue(data, forKey: "inputMessage")
+            filter.setValue("H", forKey: "inputCorrectionLevel")
+            let transform = CGAffineTransform(scaleX: 3, y: 3)
+
+            if let output = filter.outputImage?.transformed(by: transform) {
+                return UIImage(ciImage: output)
+            }
+        }
+
+        return nil
+    }
+
+  
+    
+    
    
      
     @IBAction func generateQRcode(_ sender: Any) {
         
-        if qrcodeImage == nil{
-            if editText?.text == ""{
+        if imgQRCode.image == nil{
+            
+            let test = "https://www.google.com/?client=safari&channel=mac_bm"
+        
+            imgQRCode.image = Create(string: test)
+            
+            editText?.resignFirstResponder()  //隱藏鍵盤
+            btnAction.setTitle("清除", for: [])
+            
+            gotoWeb(url: test)
+            
+            
+           /* if editText?.text == ""{
                        return
-                }
-                let url = editText?.text
+                }*/
+               /* let url = editText?.text
                 let data = url?.data(using: String.Encoding.ascii)
                 let filter = CIFilter(name: "CIQRCodeGenerator")
             
-                gotoWeb(url: url)
+                let test = "https://www.google.com/?client=safari&channel=mac_bm"
+            
+                //gotoWeb(url: test)  //點選產生QRcode後直接導向網頁
            
                 
                 filter?.setValue(data, forKey: "inputMessage")
-                filter?.setValue("H", forKey: "inputCorrectionLevel")
+                filter?.setValue("Q", forKey: "inputCorrectionLevel")
                 
                  qrcodeImage = filter?.outputImage
                  
-                 //imgQRCode.image = UIImage(ciImage: qrcodeImage) //將輸出的 CIImage 轉換成 UIImage 物件
-                  fixQR()
+                 imgQRCode.image = UIImage(ciImage: qrcodeImage) //將輸出的 CIImage 轉換成 UIImage 物件
+                  //fixQR()
                    editText?.resignFirstResponder()  //隱藏鍵盤
-                   btnAction.setTitle("清除", for: [])
+                   btnAction.setTitle("清除", for: [])*/
                     
         }else{
             imgQRCode.image = nil
-            qrcodeImage = nil
+            //qrcodeImage = nil
             btnAction.setTitle("generate", for: [])
             editText?.text = ""
         }
        
     }
     
-    func fixQR() {
+   /* func fixQR() {
         let scaleX = imgQRCode.frame.size.width / qrcodeImage.extent.size.width   //使圖片縮放比例相同
         let scaleY = imgQRCode.frame.size.height / qrcodeImage.extent.size.height
 
@@ -68,10 +106,12 @@ class ViewController: UIViewController {
 
         imgQRCode.image = UIImage(ciImage: transformedImage)
 
-
-    }
+  
+    }*/
     
-    func gotoWeb(url : String?){
+   
+    
+    func gotoWeb(url : String?){   //網址導向
         if(url == ""){
             return
         }else{
